@@ -9,8 +9,10 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import javax.mail.Authenticator;
+import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 @Component
@@ -19,7 +21,7 @@ public class SendEmailConsumer {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @KafkaListener(topics = "user_signup", groupId = "emailService")
+    @KafkaListener(topics = "user_signup_email", groupId = "emailService")
     public void sendEmail(String message) {
         try {
             MessageDto messageDto = objectMapper.readValue(message, MessageDto.class);
@@ -41,7 +43,7 @@ public class SendEmailConsumer {
 
             EmailUtil.sendEmail(session, messageDto.getTo(), messageDto.getSubject(), messageDto.getBody());
 
-        } catch (JsonProcessingException ex) {
+        } catch (JsonProcessingException | MessagingException | UnsupportedEncodingException ex) {
             System.out.println(ex.getMessage());
             throw new RuntimeException(ex);
         }
