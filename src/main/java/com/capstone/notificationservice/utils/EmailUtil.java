@@ -1,51 +1,41 @@
 package com.capstone.notificationservice.utils;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
+import com.capstone.notificationservice.dtos.EmailDto;
+import org.springframework.stereotype.Component;
+
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.Properties;
 
+@Component
 public class EmailUtil {
 
     /**
      * Utility method to send simple HTML email
-     *
-     * @param session
-     * @param toEmail
-     * @param subject
-     * @param body
      */
-    public static void sendEmail(Session session, String toEmail, String subject, String body) throws MessagingException, UnsupportedEncodingException {
-        try {
-            MimeMessage msg = new MimeMessage(session);
-            //set message headers
-            msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
-            msg.addHeader("format", "flowed");
-            msg.addHeader("Content-Transfer-Encoding", "8bit");
 
-            msg.setFrom(new InternetAddress("udaysisodiya.scaler@gmail.com", "NoReply-JD"));
+    public void sendEmail(EmailDto emailDTO) throws MessagingException {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
 
-            msg.setReplyTo(InternetAddress.parse("udaysisodiya.scaler@gmail.com", false));
+        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("udaysisodiya.scaler@gmail.com", "yourpassword");
+            }
+        });
 
-            msg.setSubject(subject, "UTF-8");
+        Message msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress(emailDTO.getFrom(), false));
 
-            msg.setText(body, "UTF-8");
-
-            msg.setSentDate(new Date());
-
-            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
-            System.out.println("Message is ready : " + msg);
-            Transport.send(msg);
-
-            System.out.println("EMail Sent Successfully!!");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
+        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailDTO.getTo()));
+        msg.setSubject(emailDTO.getSubject());
+        msg.setContent(emailDTO.getBody(), "text/html");
+        msg.setSentDate(new Date());
+        Transport.send(msg);
     }
 }
