@@ -26,4 +26,15 @@ public class SendEmailConsumer {
             e.printStackTrace();
         }
     }
+
+    @KafkaListener(topics = "password_reset_email", groupId = "emailService")
+    public void passwordResetEmail(String message) {
+        try {
+            EmailDto emailDto = objectMapper.readValue(message, EmailDto.class);
+            emailUtil.sendEmail(emailDto);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }
