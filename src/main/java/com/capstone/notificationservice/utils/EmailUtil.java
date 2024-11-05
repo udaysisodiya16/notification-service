@@ -25,7 +25,7 @@ public class EmailUtil {
 
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("udaysisodiya.scaler@gmail.com", "yourpassword");
+                return new PasswordAuthentication("udaysisodiya.scaler@gmail.com", "Uday9521#");
             }
         });
 
