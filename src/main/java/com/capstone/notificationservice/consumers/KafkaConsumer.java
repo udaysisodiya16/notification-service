@@ -16,8 +16,8 @@ public class KafkaConsumer {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @KafkaListener(topics = "user_signup_email", groupId = "emailService")
-    public void userSignupEmail(String message) {
+    @KafkaListener(topics = " ${kafka.topic.user.signup.notification}", groupId = "NotificationService")
+    public void signupNotification(String message) {
         try {
             NotificationDto notificationDto = objectMapper.readValue(message, NotificationDto.class);
             emailUtil.sendEmail(notificationDto);
@@ -27,8 +27,8 @@ public class KafkaConsumer {
         }
     }
 
-    @KafkaListener(topics = "password_reset_email", groupId = "emailService")
-    public void passwordResetEmail(String message) {
+    @KafkaListener(topics = "${kafka.topic.password.reset.notification}", groupId = "NotificationService")
+    public void passwordResetNotification(String message) {
         try {
             NotificationDto notificationDto = objectMapper.readValue(message, NotificationDto.class);
             emailUtil.sendEmail(notificationDto);
