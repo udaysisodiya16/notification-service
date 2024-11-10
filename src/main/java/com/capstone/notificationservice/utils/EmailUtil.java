@@ -1,6 +1,5 @@
 package com.capstone.notificationservice.utils;
 
-import com.capstone.notificationservice.dtos.NotificationDto;
 import org.springframework.stereotype.Component;
 
 import javax.mail.*;
@@ -16,7 +15,7 @@ public class EmailUtil {
      * Utility method to send simple HTML email
      */
 
-    public void sendEmail(NotificationDto notificationDTO) throws MessagingException {
+    public void sendEmail(String from, String to, String subject, String body) throws MessagingException {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -30,11 +29,11 @@ public class EmailUtil {
         });
 
         Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress(notificationDTO.getFrom(), false));
+        msg.setFrom(new InternetAddress(from, false));
 
-        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(notificationDTO.getTo()));
-        msg.setSubject(notificationDTO.getSubject());
-        msg.setContent(notificationDTO.getBody(), "text/html");
+        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+        msg.setSubject(subject);
+        msg.setContent(body, "text/html");
         msg.setSentDate(new Date());
         Transport.send(msg);
     }
