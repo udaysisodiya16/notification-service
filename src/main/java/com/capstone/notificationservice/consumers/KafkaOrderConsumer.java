@@ -16,7 +16,7 @@ public class KafkaOrderConsumer {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @KafkaListener(topics = " ${kafka.topic.order.notification}", groupId = "NotificationService")
+    @KafkaListener(topics = "${kafka.topic.order.notification}", groupId = "NotificationService")
     public void orderNotification(String message) {
         try {
             OrderNotificationDto orderNotificationDto = objectMapper.readValue(message, OrderNotificationDto.class);

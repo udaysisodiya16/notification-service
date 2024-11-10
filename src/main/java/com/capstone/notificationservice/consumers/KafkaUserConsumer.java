@@ -16,7 +16,7 @@ public class KafkaUserConsumer {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @KafkaListener(topics = " ${kafka.topic.user.signup.notification}", groupId = "NotificationService")
+    @KafkaListener(topics = "${kafka.topic.user.signup.notification}", groupId = "NotificationService")
     public void signupNotification(String message) {
         try {
             UserNotificationDto userNotificationDto = objectMapper.readValue(message, UserNotificationDto.class);

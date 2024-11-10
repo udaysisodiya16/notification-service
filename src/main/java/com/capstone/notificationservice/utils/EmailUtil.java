@@ -1,5 +1,6 @@
 package com.capstone.notificationservice.utils;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.mail.*;
@@ -10,6 +11,12 @@ import java.util.Properties;
 
 @Component
 public class EmailUtil {
+
+    @Value("${system.email.id}")
+    private String systemEmailId;
+
+    @Value("${system.email.password}")
+    private String systemEmailPassword;
 
     /**
      * Utility method to send simple HTML email
@@ -24,7 +31,7 @@ public class EmailUtil {
 
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("udaysisodiya.scaler@gmail.com", "Uday9521#");
+                return new PasswordAuthentication(systemEmailId, systemEmailPassword);
             }
         });
 
