@@ -1,8 +1,10 @@
 package com.capstone.notificationservice.consumers;
 
 import com.capstone.notificationservice.dtos.UserNotificationDto;
-import com.capstone.notificationservice.utils.EmailUtil;
+import com.capstone.notificationservice.services.INotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -10,8 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaUserConsumer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaUserConsumer.class);
+
     @Autowired
-    private EmailUtil emailUtil;
+    private INotificationService notificationService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -20,10 +24,9 @@ public class KafkaUserConsumer {
     public void signupNotification(String message) {
         try {
             UserNotificationDto userNotificationDto = objectMapper.readValue(message, UserNotificationDto.class);
-            emailUtil.sendEmail(userNotificationDto.getFrom(), userNotificationDto.getTo(), userNotificationDto.getSubject(), userNotificationDto.getBody());
+            notificationService.sendUserNotification(userNotificationDto);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -31,10 +34,9 @@ public class KafkaUserConsumer {
     public void passwordResetNotification(String message) {
         try {
             UserNotificationDto userNotificationDto = objectMapper.readValue(message, UserNotificationDto.class);
-            emailUtil.sendEmail(userNotificationDto.getFrom(), userNotificationDto.getTo(), userNotificationDto.getSubject(), userNotificationDto.getBody());
+            notificationService.sendUserNotification(userNotificationDto);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
     }
 }
