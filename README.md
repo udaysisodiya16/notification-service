@@ -28,7 +28,7 @@ delivery.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/udaysisodiya16/notification-service.git
+  git clone https://github.com/udaysisodiya16/notification-service.git
 ```
 
 ### 2. Configure Application Properties
@@ -55,26 +55,26 @@ kafka.topic.order.notification=order_notification
 Kafka requires Zookeeper to manage brokers. Start Zookeeper using the default configuration:
 
 ```bash
-bin/zookeeper-server-start.sh config/zookeeper.properties
+  bin/zookeeper-server-start.sh config/zookeeper.properties
 ```
 
 **Start Kafka Broker :**
 In another terminal, start the Kafka server
 
 ```bash
-bin/kafka-server-start.sh config/server.properties
+  bin/kafka-server-start.sh config/server.properties
 ```
 
 ### 4. Build the Project
 
 ```bash
-mvn clean package
+    mvn clean package
 ```
 
 ### 4. Run the Application
 
 ```bash
-java -jar target/notificationservice-0.0.1-SNAPSHOT.jar
+  java -jar target/notificationservice-0.0.1-SNAPSHOT.jar
 ```
 
 ---
